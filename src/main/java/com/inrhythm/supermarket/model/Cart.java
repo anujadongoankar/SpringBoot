@@ -1,4 +1,4 @@
-package supermarket;
+package com.inrhythm.supermarket.model;
 
 import org.springframework.data.annotation.Id;
 

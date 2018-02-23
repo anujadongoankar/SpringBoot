@@ -1,4 +1,4 @@
-package supermarket;
+package com.inrhythm.supermarket.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,14 @@
-package supermarket;
+package com.inrhythm.supermarket.controller;
 
+import com.inrhythm.supermarket.repository.ProductRepository;
+import com.inrhythm.supermarket.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class SuperMarketController {
+public class ProductController {
 
     @Autowired
     ProductRepository productRepository;

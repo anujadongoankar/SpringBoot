@@ -1,6 +1,7 @@
-package supermarket;
+package com.inrhythm.supermarket.repository;
 
 
+import com.inrhythm.supermarket.model.Product;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

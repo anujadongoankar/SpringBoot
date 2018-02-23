@@ -1,5 +1,6 @@
-package supermarket;
+package com.inrhythm.supermarket;
 
+import com.inrhythm.supermarket.model.Item;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,8 +28,8 @@ public class ItemTest {
 
         //then
 
-        Assert.assertEquals(existAlready.getName(),newItem.getName());
-        Assert.assertEquals(existAlready.getQuantity(),2);
+        assertEquals(existAlready.getName(),newItem.getName());
+        assertEquals(existAlready.getQuantity(),2);
 
     }
 

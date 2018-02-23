@@ -24,6 +24,10 @@ repositories {
     mavenCentral()
 }
 
+bootRepackage {
+    mainClass = 'com.inrhythm.supermarket.Application'
+}
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')

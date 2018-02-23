@@ -1,5 +1,8 @@
-package supermarket;
+package com.inrhythm.supermarket.controller;
 
+import com.inrhythm.supermarket.repository.CartRepository;
+import com.inrhythm.supermarket.model.Cart;
+import com.inrhythm.supermarket.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

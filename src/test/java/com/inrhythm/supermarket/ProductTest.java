@@ -1,4 +1,4 @@
-package supermarket;
+package com.inrhythm.supermarket;
 
 import org.junit.Assert;
 import org.junit.Test;
