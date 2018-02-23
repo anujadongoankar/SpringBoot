@@ -3,6 +3,8 @@ package supermarket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class SuperMarketController {
 
@@ -22,4 +24,9 @@ public class SuperMarketController {
         return productRepository.findAll();
     }
 
+
+    @RequestMapping(method=RequestMethod.GET, value="/products/{category}")
+    public List<Product> getByCategory(@PathVariable String category) {
+        return productRepository.findByCategory(category);
+    }
 }
