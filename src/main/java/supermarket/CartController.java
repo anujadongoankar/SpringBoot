@@ -35,7 +35,6 @@ public class CartController {
             } else {
                 existingCartItems.add(newItem);
             }
-
         }
         cartRepository.save(existingCart);
         return existingCart;
