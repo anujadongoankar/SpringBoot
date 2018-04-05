@@ -1,4 +1,5 @@
 com.inrhythm.supermarket
 com.inrhythm.supermarket.controller
+com.inrhythm.supermarket.exceptions
 com.inrhythm.supermarket.model
 com.inrhythm.supermarket.repository

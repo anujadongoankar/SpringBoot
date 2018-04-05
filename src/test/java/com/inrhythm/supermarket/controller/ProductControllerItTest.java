@@ -62,7 +62,6 @@ public class ProductControllerItTest {
 
     }
 
-
     @Test
     public void itShouldAddProduct() {
 
@@ -81,7 +80,6 @@ public class ProductControllerItTest {
         Assert.assertEquals(HttpStatus.OK, statusCode);
 
     }
-
 
     @Test
     public void itShouldRetrieveProductByCategory() {

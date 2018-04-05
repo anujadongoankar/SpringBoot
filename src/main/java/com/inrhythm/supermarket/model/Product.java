@@ -3,8 +3,6 @@ package com.inrhythm.supermarket.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.UUID;
-
 
 @Document(collection = "products")
 public class Product {
@@ -12,20 +10,39 @@ public class Product {
     @Id
     private String id;
 
-     private String name;
-     private String category;
-     private Double price;
+    private String name;
+    private String category;
+    private Double price;
 
     public Product() {
     }
 
-    public Product(String name,String category, Double price){
+    public Product(String name, String category, Double price) {
 
         this.name = name;
         this.category = category;
         this.price = price;
     }
 
+    @Override
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof Product) {
+            Product anotherProduct = (Product) anObject;
+            if (this.name.equals(anotherProduct.name))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
 
     public String getName() {
         return name;

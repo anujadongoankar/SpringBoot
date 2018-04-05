@@ -1,4 +1,4 @@
-package com.inrhythm.supermarket.controller;
+package com.inrhythm.supermarket.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

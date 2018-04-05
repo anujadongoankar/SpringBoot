@@ -5,7 +5,9 @@ import com.inrhythm.supermarket.model.Cart;
 import com.inrhythm.supermarket.model.Item;
 import com.inrhythm.supermarket.model.Product;
 import com.inrhythm.supermarket.repository.CartRepository;
+import com.inrhythm.supermarket.repository.ProductRepository;
 import org.json.JSONException;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,13 +35,30 @@ public class CartControllerItTest {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+
     TestRestTemplate restTemplate = new TestRestTemplate();
 
     HttpHeaders headers = new HttpHeaders();
 
+    List<Product> products;
+
     @Before
     public void setup() {
+        products = new ArrayList<>();
+        products.add(new Product("Item 1", "Personal Care", 5.0));
+        products.add(new Product("Item 2", "Electronics", 350.0));
+        products.add(new Product("Item 3", "Electronics", 350.0));
+        productRepository.save(products);
+    }
+
+    @After
+    public void tearDown() {
+        productRepository.deleteAll();
         cartRepository.deleteAll();
+
     }
 
     @Test
@@ -67,9 +86,35 @@ public class CartControllerItTest {
     }
 
     @Test
+    public void itShouldThrowErrorWhenInvalidItemAddedToCart() {
+
+        //given
+        List<Item> items = new ArrayList<>();
+        items.add(new Item("Invalid item", 2));
+
+        HttpEntity<List<Item>> entity = new HttpEntity<List<Item>>(items, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/cart"),
+                HttpMethod.POST, entity, String.class);
+
+        String expected = "{\"message\":\"Invalid item found\"}\n";
+        HttpStatus statusCode = response.getStatusCode();
+
+        try {
+            JSONAssert.assertEquals(expected, response.getBody(), JSONCompareMode.LENIENT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, statusCode);
+    }
+
+    @Test
     public void itShouldUpdateCardWithNewItem() {
 
         //given
+        productRepository.save(new Product("new item", "someCategory", 5.0));
+
         List<Item> items = new ArrayList<>();
         items.add(new Item("Item 1", 2));
         Cart cart = new Cart(items);
@@ -83,10 +128,10 @@ public class CartControllerItTest {
         HttpEntity<Cart> entity = new HttpEntity<Cart>(requestCart, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/cart/"+cart.getId()),
+                createURLWithPort("/cart/" + cart.getId()),
                 HttpMethod.PUT, entity, String.class);
 
-        String expected = "{\"id\":"+cart.getId()+",\"items\":[{\"name\":\"Item 1\",\"quantity\":2},{\"name\":\"new item\",\"quantity\":1}]}";
+        String expected = "{\"id\":" + cart.getId() + ",\"items\":[{\"name\":\"Item 1\",\"quantity\":2},{\"name\":\"new item\",\"quantity\":1}]}";
         HttpStatus statusCode = response.getStatusCode();
 
         try {
@@ -115,11 +160,11 @@ public class CartControllerItTest {
         HttpEntity<Cart> entity = new HttpEntity<Cart>(requestCart, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/cart/"+cart.getId()),
+                createURLWithPort("/cart/" + cart.getId()),
                 HttpMethod.PUT, entity, String.class);
 
-        
-        String expected = "{\"id\":"+cart.getId()+",\"items\":[{\"name\":\"Item 1\",\"quantity\":5}]}\n";
+
+        String expected = "{\"id\":" + cart.getId() + ",\"items\":[{\"name\":\"Item 1\",\"quantity\":5}]}\n";
         HttpStatus statusCode = response.getStatusCode();
 
         try {
@@ -142,13 +187,13 @@ public class CartControllerItTest {
         List<Item> newItems = new ArrayList<>();
         newItems.add(new Item("Item 1", 2));
 
-        HttpEntity< List<Item> > entity = new HttpEntity< List<Item> >(newItems, headers);
+        HttpEntity<List<Item>> entity = new HttpEntity<List<Item>>(newItems, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/cart/"+cart.getId()),
+                createURLWithPort("/cart/" + cart.getId()),
                 HttpMethod.DELETE, entity, String.class);
 
-        String expected = "{\"id\":"+cart.getId()+",\"items\":[]}\n";
+        String expected = "{\"id\":" + cart.getId() + ",\"items\":[]}\n";
         HttpStatus statusCode = response.getStatusCode();
 
         try {
@@ -169,13 +214,13 @@ public class CartControllerItTest {
 
         List<Item> newItems = new ArrayList<>();
         newItems.add(new Item("Item 1", 2));
-        HttpEntity< List<Item> > entity = new HttpEntity< List<Item> >(newItems, headers);
+        HttpEntity<List<Item>> entity = new HttpEntity<List<Item>>(newItems, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/cart/"+cart.getId()),
+                createURLWithPort("/cart/" + cart.getId()),
                 HttpMethod.DELETE, entity, String.class);
 
-        String expected = "{\"id\":"+cart.getId()+",\"items\":[{\"name\":\"Item 1\",\"quantity\":3}]}\n";
+        String expected = "{\"id\":" + cart.getId() + ",\"items\":[{\"name\":\"Item 1\",\"quantity\":3}]}\n";
         HttpStatus statusCode = response.getStatusCode();
 
         try {
@@ -188,7 +233,7 @@ public class CartControllerItTest {
 
 
     @Test
-    public void itShouldThrowErrorIfItemNotPresentInCardForDeletion() {
+    public void itShouldThrowErrorIfItemNotPresentInCartForDeletion() {
         //given
         List<Item> items = new ArrayList<>();
         items.add(new Item("Item 1", 5));
@@ -196,16 +241,16 @@ public class CartControllerItTest {
         cartRepository.save(cart);
 
         List<Item> newItems = new ArrayList<>();
-        newItems.add(new Item("Item 2", 2));
-        HttpEntity< List<Item> > entity = new HttpEntity< List<Item> >(newItems, headers);
+        newItems.add(new Item("Item 6", 2));
+        HttpEntity<List<Item>> entity = new HttpEntity<List<Item>>(newItems, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                createURLWithPort("/cart/"+cart.getId()),
+                createURLWithPort("/cart/" + cart.getId()),
                 HttpMethod.DELETE, entity, String.class);
 
-        String expected =  "{\"message\":\"Item :Item 2not found\"}\n";
-        HttpStatus statusCode = response.getStatusCode();
 
+        String expected = "{\"message\":\"Item :Item 6 not found\"}\n";
+        HttpStatus statusCode = response.getStatusCode();
         try {
             JSONAssert.assertEquals(expected, response.getBody(), JSONCompareMode.LENIENT);
         } catch (JSONException e) {
@@ -213,6 +258,7 @@ public class CartControllerItTest {
         }
         Assert.assertEquals(HttpStatus.NOT_FOUND, statusCode);
     }
+
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
     }
