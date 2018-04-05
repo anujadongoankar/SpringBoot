@@ -1,4 +1,4 @@
-package com.inrhythm.supermarket;
+package com.inrhythm.supermarket.model;
 
 import com.inrhythm.supermarket.model.Item;
 import org.junit.Assert;
@@ -50,9 +50,7 @@ public class ItemTest {
         Item existAlready = newItem.ifItemExistAlready(existingItems);
 
         //then
-
         Assert.assertNull(existAlready);
 
     }
-
 }

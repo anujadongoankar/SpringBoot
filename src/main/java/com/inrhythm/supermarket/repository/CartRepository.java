@@ -7,4 +7,7 @@ public interface CartRepository extends CrudRepository<Cart, String> {
 
     @Override
     Cart findOne(String id);
+
+    @Override
+    void deleteAll();
 }

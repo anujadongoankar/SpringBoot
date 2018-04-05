@@ -33,8 +33,11 @@ public class Item {
         this.quantity = this.quantity + quantity;
     }
 
-    //TODO equals method for name
-    public Item ifItemExistAlready( List<Item> existingCartItems) {
+    public void reduceQuantity(int quantity) {
+        this.quantity = this.quantity - quantity;
+    }
+
+    public Item ifItemExistAlready(List<Item> existingCartItems) {
         for (Item existingItem : existingCartItems) {
             if (existingItem.getName().equals(name)) {
                 return existingItem;
@@ -43,3 +46,6 @@ public class Item {
         return null;
     }
 }
+
+
+

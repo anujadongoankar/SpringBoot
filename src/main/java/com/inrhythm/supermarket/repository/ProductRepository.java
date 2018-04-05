@@ -8,6 +8,11 @@ import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, String> {
 
+    @Override
+    List<Product> findAll();
+
     List<Product> findByCategory(String category);
 
+    @Override
+    void deleteAll();
 }
